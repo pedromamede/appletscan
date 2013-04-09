@@ -11,6 +11,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.apache.commons.codec.binary.Base64OutputStream;
 
 /**
  *
@@ -59,11 +60,11 @@ public class Digitalizar extends javax.swing.JApplet {
     
     public void enviarImagemViaJs(BufferedImage image){
         try{
-//            ByteArrayOutputStream os = new ByteArrayOutputStream();
-//            OutputStream b64 = new Base64OutputStream(os);
-//            ImageIO.write(image, "png", b64);
-//            String result = os.toString("UTF-8");
-//            getAppletContext().showDocument(new URL("javascript:receber_imagem('" + result + "')"));
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            OutputStream b64 = new Base64OutputStream(os);
+            ImageIO.write(image, "png", b64);
+            String result = os.toString("UTF-8");
+            getAppletContext().showDocument(new URL("javascript:receber_imagem('" + result + "')"));
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
