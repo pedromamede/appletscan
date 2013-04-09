@@ -21,7 +21,7 @@ public class Scanner {
     
     public void scanear() {
         try {
-            Source source = SourceManager.instance().selectSourceUI();
+            Source source = SourceManager.instance().getDefaultSource();
             source.open();
             imagemScanneada = source.acquireImageAsBufferedImage();
             salvarImagemNoDisco();

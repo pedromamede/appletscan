@@ -161,7 +161,7 @@ public class Digitalizar extends javax.swing.JApplet {
         ImageIcon imageIcon = new ImageIcon(bfrImage);
         labelImagem.setIcon(imageIcon);
         this.repaint();
-        //enviarImagemViaJs(bfrImage);
+        enviarImagemViaJs(bfrImage);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
