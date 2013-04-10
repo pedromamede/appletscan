@@ -4,3 +4,8 @@
 		<param name="archive" value="AppletScan.jar, JTwain.jar, JTwainLicense.jar, commons-codec-1.7.jar" />
     </object>
 </div>
+
+
+<%= form_tag(:controller => "images", :action => "upload", :method => "post") %>
+	<%= hidden_field_tag :image_data %>
+<%end%>
