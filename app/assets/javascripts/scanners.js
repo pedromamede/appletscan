@@ -1,3 +1,4 @@
 function receber_imagem(imagem){
-	alert("CHAMOU FUNCAO");
+	$('#image_data').val(imagem);
+	$('#imagem_upload_form').submit();
 }

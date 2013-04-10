@@ -6,6 +6,6 @@
 </div>
 
 
-<%= form_tag(:controller => "images", :action => "upload", :method => "post") %>
+<%= form_tag("/images/upload", :method => "post", :id => "imagem_upload_form") do %>
 	<%= hidden_field_tag :image_data %>
-<%end%>
+<% end %>
