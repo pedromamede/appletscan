@@ -5,19 +5,19 @@
 package br.com.miltecnologia.main;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.net.URL;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import org.apache.commons.codec.binary.Base64OutputStream;
 
 /**
  *
  * @author admin
  */
 public class Digitalizar extends javax.swing.JApplet {
+    
+    private BufferedImage ultimaImagemDigitalizada = null;
+    Scanner scanner = new Scanner();
+    
     /**
      * Initializes the applet Digitalizar
      */
@@ -58,17 +58,12 @@ public class Digitalizar extends javax.swing.JApplet {
         }
     }
     
-    public void enviarImagemViaJs(BufferedImage image){
+    public void enviarImagemViaJs(String encodedImage){
         try{
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            OutputStream b64 = new Base64OutputStream(os);
-            ImageIO.write(image, "png", b64);
-            String result = os.toString("UTF-8");
-            getAppletContext().showDocument(new URL("javascript:receber_imagem('" + result + "')"));
+            getAppletContext().showDocument(new URL("javascript:receber_imagem('" + encodedImage + "')"));
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        
     }
 
     /**
@@ -82,16 +77,19 @@ public class Digitalizar extends javax.swing.JApplet {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jbScan = new javax.swing.JButton();
         jpImagem = new javax.swing.JPanel();
         labelImagem = new javax.swing.JLabel();
+        jbUpload = new javax.swing.JButton();
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(600, 600));
 
         jLabel1.setText("Teste Digitalizar");
 
-        jButton1.setText("SCAN!");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jbScan.setText("SCAN!");
+        jbScan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jbScanActionPerformed(evt);
             }
         });
 
@@ -110,24 +108,29 @@ public class Digitalizar extends javax.swing.JApplet {
             .addComponent(labelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
         );
 
+        jbUpload.setText("UPLOAD!");
+        jbUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbUploadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpImagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(140, 140, 140)
-                                .addComponent(jButton1)))
-                        .addGap(0, 157, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jpImagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jbScan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbUpload)))
+                        .addGap(0, 158, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -136,7 +139,9 @@ public class Digitalizar extends javax.swing.JApplet {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbScan)
+                    .addComponent(jbUpload))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpImagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -154,20 +159,31 @@ public class Digitalizar extends javax.swing.JApplet {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Scanner scanner = new Scanner();
+    private void jbScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbScanActionPerformed
         scanner.scanear();
-        BufferedImage bfrImage = scanner.getImagemScanneada();
-        ImageIcon imageIcon = new ImageIcon(bfrImage);
+        ultimaImagemDigitalizada = scanner.getImagemScanneada();
+        ImageIcon imageIcon = new ImageIcon(ultimaImagemDigitalizada);
         labelImagem.setIcon(imageIcon);
         this.repaint();
-        enviarImagemViaJs(bfrImage);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        //scanner.salvarImagemNoDisco();
+        
+    }//GEN-LAST:event_jbScanActionPerformed
+
+    private void jbUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbUploadActionPerformed
+        if(ultimaImagemDigitalizada == null){
+            JOptionPane.showMessageDialog(this, "Nenhuma imagem foi digitalizada.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String imgString = scanner.encodeToString(ultimaImagemDigitalizada, "jpeg");
+            //System.out.println(imgString);
+            enviarImagemViaJs(imgString);
+        }
+    }//GEN-LAST:event_jbUploadActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton jbScan;
+    private javax.swing.JButton jbUpload;
     private javax.swing.JPanel jpImagem;
     private javax.swing.JLabel labelImagem;
     // End of variables declaration//GEN-END:variables
