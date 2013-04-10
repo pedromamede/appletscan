@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
 
@@ -20,12 +21,16 @@ import org.apache.commons.codec.binary.Base64;
 public class Scanner {
 
     private BufferedImage imagemScanneada;
+    private ArrayList listaImagens = new ArrayList();
     
     public void scanear() {
         try {
             Source source = SourceManager.instance().getDefaultSource();
             source.open();
-            imagemScanneada = source.acquireImageAsBufferedImage();
+            do{
+                imagemScanneada = source.acquireImageAsBufferedImage();
+                listaImagens.add(imagemScanneada);
+            }while(source.hasMoreImages());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -69,5 +74,9 @@ public class Scanner {
     
     public BufferedImage getImagemScanneada(){
         return imagemScanneada;
+    }
+    
+    public ArrayList getListaImagens(){
+        return listaImagens;
     }
 }

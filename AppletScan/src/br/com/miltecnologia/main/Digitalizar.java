@@ -6,6 +6,7 @@ package br.com.miltecnologia.main;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -173,9 +174,12 @@ public class Digitalizar extends javax.swing.JApplet {
         if(ultimaImagemDigitalizada == null){
             JOptionPane.showMessageDialog(this, "Nenhuma imagem foi digitalizada.", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
-            String imgString = scanner.encodeToString(ultimaImagemDigitalizada, "jpeg");
-            //System.out.println(imgString);
-            enviarImagemViaJs(imgString);
+            ArrayList listaImagens = scanner.getListaImagens();
+            for (Object imagem: listaImagens) {
+                String imgString = scanner.encodeToString((BufferedImage)imagem, "jpeg");
+                enviarImagemViaJs(imgString);
+                //System.out.println(imgString);
+            }
         }
     }//GEN-LAST:event_jbUploadActionPerformed
 
