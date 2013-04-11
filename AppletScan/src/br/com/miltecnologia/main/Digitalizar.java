@@ -175,11 +175,15 @@ public class Digitalizar extends javax.swing.JApplet {
             JOptionPane.showMessageDialog(this, "Nenhuma imagem foi digitalizada.", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             ArrayList listaImagens = scanner.getListaImagens();
+            JOptionPane.showMessageDialog(this,listaImagens.size()+" imagens foram digitalizadas.");
+            int i = 1;
             for (Object imagem: listaImagens) {
                 String imgString = scanner.encodeToString((BufferedImage)imagem, "jpeg");
                 enviarImagemViaJs(imgString);
-                //System.out.println(imgString);
+                JOptionPane.showMessageDialog(this,i+" imagem enviada.");
+                i++;
             }
+            i = 0;
         }
     }//GEN-LAST:event_jbUploadActionPerformed
 
