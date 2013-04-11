@@ -6,6 +6,6 @@
 </div>
 
 
-<%= form_tag("/images/upload", :method => "post", :id => "imagem_upload_form") do %>
+<%= form_tag("/images/upload", :method => "post", :id => "imagem_upload_form", :remote => true) do %>
 	<%= hidden_field_tag :image_data %>
 <% end %>
