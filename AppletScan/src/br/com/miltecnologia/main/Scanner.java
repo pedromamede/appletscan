@@ -21,7 +21,7 @@ import org.apache.commons.codec.binary.Base64;
 public class Scanner {
 
     private BufferedImage imagemScanneada;
-    private ArrayList listaImagens = new ArrayList();
+    private int quantidadeImagensDigitalizadas = 0;
     
     public void scanear() {
         try {
@@ -29,7 +29,8 @@ public class Scanner {
             source.open();
             do{
                 imagemScanneada = source.acquireImageAsBufferedImage();
-                listaImagens.add(imagemScanneada);
+                quantidadeImagensDigitalizadas++;
+                salvarImagemNoDisco(quantidadeImagensDigitalizadas);
             }while(source.hasMoreImages());
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,10 +39,10 @@ public class Scanner {
         }
     }
 
-    public void salvarImagemNoDisco() {
+    public void salvarImagemNoDisco(int numeroImagem) {
         try {
-            File outputfile = new File("C://imagemScannerTeste.png");
-            ImageIO.write(imagemScanneada, "png", outputfile);
+            File outputfile = new File("C://scanapplet - imagens/"+numeroImagem+"imagem.jpeg");
+            ImageIO.write(imagemScanneada, "jpeg", outputfile);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,7 +77,8 @@ public class Scanner {
         return imagemScanneada;
     }
     
-    public ArrayList getListaImagens(){
-        return listaImagens;
+    public int getQuantidadeImagensDigitalizadas(){
+        return quantidadeImagensDigitalizadas;
     }
+    
 }

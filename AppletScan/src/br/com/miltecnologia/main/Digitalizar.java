@@ -5,8 +5,12 @@
 package br.com.miltecnologia.main;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -148,18 +152,27 @@ public class Digitalizar extends javax.swing.JApplet {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbScanActionPerformed
-        scanner.scanear();
-        ultimaImagemDigitalizada = scanner.getImagemScanneada();
-        ImageIcon imageIcon = new ImageIcon(ultimaImagemDigitalizada);
-        labelImagem.setIcon(imageIcon);
-        this.repaint();
-        ArrayList listaImagens = scanner.getListaImagens();
-        JOptionPane.showMessageDialog(this,listaImagens.size()+" imagens foram digitalizadas.");
-        for (Object imagem: listaImagens) {
-            String imgString = scanner.encodeToString((BufferedImage)imagem, "jpeg");
-            enviarImagemViaJs(imgString);
+        try {
+            scanner.scanear();
+            ultimaImagemDigitalizada = scanner.getImagemScanneada();
+            ImageIcon imageIcon = new ImageIcon(ultimaImagemDigitalizada);
+            labelImagem.setIcon(imageIcon);
+            this.repaint();
+            JOptionPane.showMessageDialog(this,scanner.getQuantidadeImagensDigitalizadas()+" imagens foram digitalizadas.");
+            for(int i=1;i<=scanner.getQuantidadeImagensDigitalizadas(); i++){
+                BufferedImage bufferedImage;
+                File imageFile = new File("C://scanapplet - imagens/"+i+"imagem.jpeg");
+                bufferedImage = ImageIO.read(imageFile);
+                String imgString = scanner.encodeToString(bufferedImage, "jpeg");
+                enviarImagemViaJs(imgString);
+                //System.out.println(i+": processando imagem.");
+                imageFile.delete();
+                //System.out.println(i+": deletando imagem.");
+            }
+            //scanner.salvarImagemNoDisco();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        //scanner.salvarImagemNoDisco();
         
     }//GEN-LAST:event_jbScanActionPerformed
 
