@@ -81,13 +81,12 @@ public class Digitalizar extends javax.swing.JApplet {
         jbScan = new javax.swing.JButton();
         jpImagem = new javax.swing.JPanel();
         labelImagem = new javax.swing.JLabel();
-        jbUpload = new javax.swing.JButton();
 
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 600));
 
         jLabel1.setText("Teste Digitalizar");
 
-        jbScan.setText("SCAN!");
+        jbScan.setText("SCAN and UPLOAD!");
         jbScan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbScanActionPerformed(evt);
@@ -106,15 +105,8 @@ public class Digitalizar extends javax.swing.JApplet {
         );
         jpImagemLayout.setVerticalGroup(
             jpImagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+            .addComponent(labelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
         );
-
-        jbUpload.setText("UPLOAD!");
-        jbUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbUploadActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -127,11 +119,8 @@ public class Digitalizar extends javax.swing.JApplet {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jbScan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbUpload)))
-                        .addGap(0, 158, Short.MAX_VALUE)))
+                            .addComponent(jbScan))
+                        .addGap(0, 431, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -140,9 +129,7 @@ public class Digitalizar extends javax.swing.JApplet {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbScan)
-                    .addComponent(jbUpload))
+                .addComponent(jbScan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpImagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -166,28 +153,20 @@ public class Digitalizar extends javax.swing.JApplet {
         ImageIcon imageIcon = new ImageIcon(ultimaImagemDigitalizada);
         labelImagem.setIcon(imageIcon);
         this.repaint();
+        ArrayList listaImagens = scanner.getListaImagens();
+        JOptionPane.showMessageDialog(this,listaImagens.size()+" imagens foram digitalizadas.");
+        for (Object imagem: listaImagens) {
+            String imgString = scanner.encodeToString((BufferedImage)imagem, "jpeg");
+            enviarImagemViaJs(imgString);
+        }
         //scanner.salvarImagemNoDisco();
         
     }//GEN-LAST:event_jbScanActionPerformed
-
-    private void jbUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbUploadActionPerformed
-        if(ultimaImagemDigitalizada == null){
-            JOptionPane.showMessageDialog(this, "Nenhuma imagem foi digitalizada.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }else{
-            ArrayList listaImagens = scanner.getListaImagens();
-            JOptionPane.showMessageDialog(this,listaImagens.size()+" imagens foram digitalizadas.");
-            for (Object imagem: listaImagens) {
-                String imgString = scanner.encodeToString((BufferedImage)imagem, "jpeg");
-                enviarImagemViaJs(imgString);
-            }
-        }
-    }//GEN-LAST:event_jbUploadActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbScan;
-    private javax.swing.JButton jbUpload;
     private javax.swing.JPanel jpImagem;
     private javax.swing.JLabel labelImagem;
     // End of variables declaration//GEN-END:variables
