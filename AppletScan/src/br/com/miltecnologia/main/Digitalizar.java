@@ -175,7 +175,6 @@ public class Digitalizar extends javax.swing.JApplet {
             JOptionPane.showMessageDialog(this, "Nenhuma imagem foi digitalizada.", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             ArrayList listaImagens = scanner.getListaImagens();
-            JOptionPane.showMessageDialog(this,listaImagens.size()+" imagens foram digitalizadas.");
             for (Object imagem: listaImagens) {
                 String imgString = scanner.encodeToString((BufferedImage)imagem, "jpeg");
                 enviarImagemViaJs(imgString);
